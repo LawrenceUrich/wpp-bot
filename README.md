@@ -1,6 +1,6 @@
 # WPP Bot UI — completo (2025)
 
-Bot WhatsApp com **UI web** e **CLI**, fluxo **“Sabe o ID do grupo?”**, suporte a **link de convite**, **persistência** (grupo + IP da loja), fila de execução, **aviso de manutenção** (CLI e UI) e integração para rodar `selenium.js` e **enviar PDF** no grupo.
+Bot WhatsApp com **UI web** e **CLI**, fluxo **“Sabe o ID do grupo?”**, suporte a **link de convite**, **persistência** (grupo), fila de execução, **aviso de manutenção** (CLI e UI) e integração para rodar `selenium.js` e **enviar PDF** no grupo.
 
 **funciona com o seu Chrome**, sem depender de baixar Chromium.
 
