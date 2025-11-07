@@ -5,13 +5,10 @@
 **Licença:** MIT  
 **Versão:** 1.0.1  
 
-<<<<<<< HEAD
----
 =======
 1. Como baixar o projeto
 git clone https://github.com/LawrenceUrich/wpp-bot.git >>
 cd wpp-bot
->>>>>>> b2bba13aead7ff29929a659e222a3c1d9f630c62
 
 ## 🧠 Sobre o projeto
 
