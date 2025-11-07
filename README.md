@@ -159,16 +159,18 @@ Esses registros tornam o debug mais rápido e preciso.
 
 ## 💡 Dica:
 
-Se algo quebrar, verifique os logs primeiro.
-Eles mostram exatamente onde o processo parou, o que foi executado e o que deu errado.
+### Se algo quebrar, verifique os logs primeiro.
+### Eles mostram exatamente onde o processo parou, o que foi executado e o que deu errado.
+
 ---
 
 ## 📞 Suporte
 
 ### Se não conseguir identificar o problema ou precisar de ajuda com a configuração, entre em contato:
-📱 (21) 98211-1477.
+#### 📱 (21) 98211-1477.
 
-👤 Leonardo (Urich).
+#### 👤 Leonardo (Urich).
 
 Consulte CREDITS.md para detalhes de autoria, contribuições e agradecimentos.
+
 =======
