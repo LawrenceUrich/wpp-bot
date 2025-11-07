@@ -136,19 +136,19 @@ wpp-bot/
 
 ### 🔍 Eles mostram:
 
-- tentativas de login,
+- Tentativas de login.
 
-- pós-login,
+- Pós-login.
 
-- possíveis erros do Selenium ou do fluxo.
+- Possíveis erros do Selenium ou do fluxo.
 
-- Isso facilita debugar rapidamente,
+- Isso facilita debugar rapidamente.
 
-- ver onde falhou,
+- Ver onde falhou.
 
-- conferir se o código do grupo foi lido,
+- Conferir se o código do grupo foi lido.
 
-- visualizar se o RUB respondeu como esperado.
+- Visualizar se o RUB respondeu como esperado.
 
 Esses registros tornam o debug mais rápido e preciso.
 
