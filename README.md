@@ -73,6 +73,7 @@ npm start
 ```
 
 O projeto usa dist/server.js como entrada principal.
+---
 
 ## 6️⃣ ⚙️ Scripts úteis
 
@@ -102,6 +103,7 @@ npm run manager:start
 ```bash
 npm run reinstall
 ```
+---
 
 
 ## 7️⃣ 📂 Estrutura (resumida)
@@ -131,6 +133,7 @@ wpp-bot/
 ├─ LICENSE          # Licença MIT
 └─ README.md        # Documentação do projeto
 ```
+---
 
 ## 8️⃣ 🧾 Sobre os logs
 
@@ -151,11 +154,13 @@ wpp-bot/
 - Visualizar se o RUB respondeu como esperado.
 
 Esses registros tornam o debug mais rápido e preciso.
+---
 
 ## 💡 Dica:
 
 Se algo quebrar, verifique os logs primeiro.
 Eles mostram exatamente onde o processo parou, o que foi executado e o que deu errado.
+---
 
 ## 📞 Suporte
 
