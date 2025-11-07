@@ -4,7 +4,7 @@ Bot que lê códigos enviados em um grupo do WhatsApp, dispara o Selenium no RUB
 Interface simples, logs salvos em disco e um manager para testes de auto-atualização/config.
 
 1. Como baixar o projeto
-git clone https://github.com/LawrenceUrich/wpp-bot.git
+git clone https://github.com/LawrenceUrich/wpp-bot.git >>
 cd wpp-bot
 
 2. Instalar dependências
@@ -92,5 +92,6 @@ ver onde falhou,
 conferir se o código do grupo foi lido,
 
 visualizar se o RUB respondeu como esperado.
+
 
 Se algo quebrar, primeiro olha os logs. Caso não consiga identificar, entre em contato: (21) 98211-1477 >> Leonardo
