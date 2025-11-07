@@ -1,4 +1,6 @@
-# 🤖 WPP BOT UI — Automação WhatsApp + Selenium (RUB)
+#                🤖 WPP BOT UI
+
+## Automação WhatsApp + Selenium (RUB)
 
 **Fluxo:** código enviado no grupo → execução via Selenium (RUB) → PDF, print e retorno automático no grupo.  
 **Desenvolvimento:** Urich (Leonardo)  
