@@ -1,6 +1,7 @@
-node_modules
-.wwebjs_auth
-.wwebjs_cache
-*.pdf
-downloads/
-data/
+/node_modules
+/dist
+/src/data
+/dist/data
+/downloads
+/wwebjs_auth
+/.wwebjs_cache

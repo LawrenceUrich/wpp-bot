@@ -1,151 +1,467 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <title>WPP Bot — Painel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <h1>WPP Bot — Painel</h1>
-    <div class="row" style="flex:0 0 auto; gap:10px">
-      <span id="connState" class="muted">Carregando…</span>
-      <button class="secondary" onclick="document.querySelector('#creditsCard').scrollIntoView({behavior:'smooth'})">Créditos</button>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <title>WPP Bot — Painel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <main>
-    <div class="grid">
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: {} } };</script>
 
-      <!-- Conexão / QR / Logs -->
-      <div class="card">
-        <h3>Conexão</h3>
-        <div id="qrBox" class="qr-box" style="margin:10px 0;"></div>
-        <div id="savedGroup" class="hidden saved"></div>
-        <div id="storeSaved" class="hidden saved"></div>
-        <div class="panel">
-          <strong>Logs</strong>
-          <pre id="logs" class="logs"></pre>
-        </div>
-      </div>
-
-      <!-- Config da Loja -->
-      <div class="card">
-        <h3>Config da Loja (RUB)</h3>
-        <label>Apelido</label>
-        <input id="storeNameInput" placeholder="Ex.: Loja Centro" />
-        <label>IP do RUB</label>
-        <input id="storeIpInput" placeholder="Ex.: 10.48.69.146" />
-        <div class="row" style="margin-top:10px">
-          <button id="btnSaveIP">Salvar IP</button>
-          <button class="secondary" id="btnClearIP">Limpar</button>
-        </div>
-      </div>
-
-      <!-- Grupo -->
-      <div class="card">
-        <h3>Grupo alvo</h3>
-        <div class="row">
-          <button id="btnKnowId">Já sei o ID</button>
-          <button class="secondary" id="btnDontKnowId">Não sei o ID</button>
-        </div>
-
-        <div id="knowIdPanel" class="hidden panel">
-          <label>ID do grupo <small class="mono">(ex.: 1203...@g.us)</small></label>
-          <input id="groupIdInput" placeholder="1203...@g.us" />
-          <div class="row" style="margin-top:10px">
-            <button id="btnSetGroup">Salvar grupo</button>
-            <button class="secondary" id="btnClearGroup">Limpar salvo</button>
+    <!-- Seu CSS pode sobrepor utilitárias -->
+    <link rel="stylesheet" href="style.css" />
+    <meta name="color-scheme" content="dark light" />
+  </head>
+  <body class="min-h-screen bg-neutral-950 text-neutral-100">
+    <!-- App Shell -->
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside class="w-72 border-r border-neutral-800 bg-neutral-900/60 backdrop-blur">
+        <div class="px-5 py-4 flex items-center gap-3 border-b border-neutral-800">
+          <div class="h-9 w-9 rounded bg-emerald-600 flex items-center justify-center font-bold">W</div>
+          <div>
+            <div class="text-sm text-neutral-400">WPP Bot</div>
+            <div class="text-xs text-neutral-500">MIT • © 2025 Urich</div>
           </div>
-
-          <label style="margin-top:14px">Ou entrar por convite</label>
-          <input id="inviteInput" placeholder="https://chat.whatsapp.com/XXXX" />
-          <button id="btnJoinInvite" style="margin-top:8px">Entrar pelo convite</button>
         </div>
 
-        <div id="dontKnowPanel" class="hidden panel">
-          <div class="row">
-            <input id="searchGroup" placeholder="Buscar pelo nome" />
-            <button id="btnReloadGroups" class="secondary" style="flex:0 0 auto">Atualizar</button>
+        <nav class="p-3 space-y-1">
+          <button data-tab="home" class="tab-btn w-full text-left px-3 py-2 rounded hover:bg-neutral-800 flex items-center gap-2 bg-neutral-800">
+            <span class="inline-block w-5 h-5">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="opacity-80"><path d="M12 3l8 7h-3v8h-10v-8h-3l8-7z"/></svg>
+            </span>
+            Home
+          </button>
+          <button data-tab="operacao" class="tab-btn w-full text-left px-3 py-2 rounded hover:bg-neutral-800 flex items-center gap-2">
+            <span class="inline-block w-5 h-5">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="opacity-80"><path d="M11 21h-1l1-7H7l6-11h1l-1 7h4l-6 11z"/></svg>
+            </span>
+            Operação
+          </button>
+          <button data-tab="config" class="tab-btn w-full text-left px-3 py-2 rounded hover:bg-neutral-800 flex items-center gap-2">
+            <span class="inline-block w-5 h-5">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="opacity-80"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zm8.94-2.72l-1.66-.96c.05-.26.08-.53.08-.82s-.03-.56-.08-.82l1.66-.96a.5.5 0 0 0 .18-.68l-1.6-2.77a.5.5 0 0 0-.62-.22l-1.66.96a6.9 6.9 0 0 0-1.42-.82l-.25-1.91A.5.5 0 0 0 13.5 1h-3a.5.5 0 0 0-.5.43l-.25 1.91c-.5.2-.98.48-1.42.82l-1.66-.96a.5.5 0 0 0-.62.22L2.95 6.2a.5.5 0 0 0 .18.68l1.66.96c-.05.26-.09.53-.09.82s.04.56.09.82l-1.66.96a.5.5 0 0 0-.18.68l1.6 2.77c.14.24.44.33.68.19l1.66-.96c.44.34.92.62 1.42.82l.25 1.91c.04.25.25.43.5.43h3c.25 0 .46-.18.5-.43l.25-1.91c.5-.2.98-.48 1.42-.82l1.66.96c.24.14.54.05.68-.19l1.6-2.77a.5.5 0 0 0-.18-.68z"/></svg>
+            </span>
+            Configuração
+          </button>
+          <button data-tab="manutencao" class="tab-btn w-full text-left px-3 py-2 rounded hover:bg-neutral-800 flex items-center gap-2">
+            <span class="inline-block w-5 h-5">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="opacity-80"><path d="M22.7 19.3l-6.4-6.4a7 7 0 0 1-8.6-8.6l2.6 2.6a3 3 0 0 0 3.8 3.8l2.6 2.6a7 7 0 0 1 8.6 8.6l-2.6-2.6zM4 22a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+            </span>
+            Manutenção
+          </button>
+          <button data-tab="historico" class="tab-btn w-full text-left px-3 py-2 rounded hover:bg-neutral-800 flex items-center gap-2">
+            <span class="inline-block w-5 h-5">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="opacity-80"><path d="M12 22A10 10 0 1 1 12 2a10 10 0 0 1 0 20zm1-10V7h-2v6h6v-2h-4z"/></svg>
+            </span>
+            Histórico
+          </button>
+          <button data-tab="suporte" class="tab-btn w-full text-left px-3 py-2 rounded hover:bg-neutral-800 flex items-center gap-2">
+            <span class="inline-block w-5 h-5">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="opacity-80"><path d="M12 22A10 10 0 1 1 12 2a10 10 0 0 1 0 20zm6-10a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm-8.5 8.06A7.96 7.96 0 0 1 4 12c0-2.01.74-3.85 1.94-5.26l2.12 2.12A4.98 4.98 0 0 0 7 12c0 1.2.43 2.3 1.06 3.17l-2.12 2.12zM18.06 7A7.96 7.96 0 0 1 20 12c0 2.01-.74 3.85-1.94 5.26l-2.12-2.12C16.57 14.3 17 13.2 17 12c0-1.2-.43-2.3-1.06-3.17L18.06 7z"/></svg>
+            </span>
+            Suporte
+          </button>
+        </nav>
+
+        <div class="px-5 py-3 border-t border-neutral-800 text-xs text-neutral-500">
+          <div id="connState" aria-live="polite">Carregando…</div>
+          <div class="mt-1">v<span class="mono" id="appVersion">1.0</span></div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <div class="flex-1">
+        <header class="border-b border-neutral-800 px-6 py-3 flex items-center justify-between">
+          <div class="text-sm text-neutral-400">Bem-vindo, Operador.</div>
+          <div class="flex gap-2">
+            <button id="btnHelp" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Ajuda</button>
+            <button id="btnTheme" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Tema</button>
           </div>
-          <select id="groupsList" size="8" style="margin-top:8px; width:100%"></select>
-          <button id="btnSelectGroup" style="margin-top:8px">Usar grupo selecionado</button>
-        </div>
+        </header>
+
+        <!-- Tabs -->
+        <main class="px-6 py-5 space-y-6">
+
+          <!-- HOME -->
+          <section data-panel="home" class="tab-panel grid gap-4 xl:grid-cols-3">
+            <!-- WhatsApp -->
+            <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">WhatsApp</h3>
+                <svg viewBox="0 0 120 40" class="h-8 w-28 opacity-60">
+                  <polyline fill="none" stroke="currentColor" stroke-width="2" points="0,20 20,10 40,22 60,8 80,16 100,6 120,18"></polyline>
+                </svg>
+              </div>
+              <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-black/40 rounded p-3">
+                  <div class="text-neutral-400">Status</div>
+                  <div id="kpiWa" class="text-emerald-400 font-semibold">—</div>
+                </div>
+                <div class="bg-black/40 rounded p-3">
+                  <div class="text-neutral-400">Modo Automático</div>
+                  <div id="kpiAuto" class="font-semibold">—</div>
+                </div>
+                <div class="bg-black/40 rounded p-3 col-span-2">
+                  <div class="text-neutral-400">Regex</div>
+                  <div id="kpiRegex" class="font-mono text-xs">^\\d{4,}$</div>
+                </div>
+              </div>
+              <div class="mt-3 flex gap-2">
+                <button id="btnOpenWA" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Abrir WhatsApp Web</button>
+                <button id="btnRefreshAll" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Atualizar</button>
+              </div>
+            </div>
+
+            <!-- Grupo & Loja -->
+            <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Contexto atual</h3>
+                <svg viewBox="0 0 120 40" class="h-8 w-28 opacity-60">
+                  <rect x="10" y="10" width="20" height="20" fill="currentColor" class="opacity-30"/>
+                  <rect x="40" y="6" width="20" height="24" fill="currentColor" class="opacity-40"/>
+                  <rect x="70" y="14" width="20" height="16" fill="currentColor" class="opacity-60"/>
+                </svg>
+              </div>
+              <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-black/40 rounded p-3">
+                  <div class="text-neutral-400">Grupo</div>
+                  <div id="kpiGroup" class="font-semibold">—</div>
+                </div>
+                <div class="bg-black/40 rounded p-3">
+                  <div class="text-neutral-400">Loja/IP</div>
+                  <div id="kpiStore" class="font-semibold">—</div>
+                </div>
+              </div>
+              <div id="savedGroup" class="hidden saved mt-3"></div>
+              <div id="storeSaved" class="hidden saved mt-2"></div>
+            </div>
+
+            <!-- Manager Quick Fix -->
+            <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Recuperação rápida</h3>
+                <svg viewBox="0 0 120 40" class="h-8 w-28 opacity-60"><path d="M10 30 L30 10 L60 30 L90 10 L110 30" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+              </div>
+              <div class="mt-2 text-sm">
+                <label class="text-neutral-400">Token admin</label>
+                <input id="mgrToken" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Ex.: ADMIN12" />
+                <label class="text-neutral-400 mt-2 block">Manager URL</label>
+                <input id="mgrUrl" value="http://localhost:3030" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" placeholder="http://localhost:3030" />
+              </div>
+              <div class="mt-3 flex gap-2 flex-wrap">
+                <button id="btnMgrStart"  class="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Start</button>
+                <button id="btnMgrStop"   class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Stop</button>
+                <button id="btnMgrStatus" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Status</button>
+                <button id="btnFix"       class="px-3 py-2 rounded bg-amber-600 hover:bg-amber-700 text-sm">Erro no código?</button>
+              </div>
+              <div class="mt-3">
+                <strong class="text-sm">Logs do manager</strong>
+                <pre id="mgrLogs" class="mt-2 p-2 rounded bg-black/60 border border-neutral-800 max-h-48 overflow-auto text-xs"></pre>
+                <div class="mt-2 flex gap-2">
+                  <button id="btnCopyMgrLogs" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Copiar</button>
+                  <button id="btnClearMgrLogs" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Limpar</button>
+                  <button id="btnReconnectLogs" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Reconectar</button>
+                </div>
+                <small class="text-neutral-400 block mt-2">Roda <code>npm update whatsapp-web.js</code> e reinicia o bot 1x.</small>
+              </div>
+            </div>
+          </section>
+
+          <!-- OPERAÇÃO -->
+          <section data-panel="operacao" class="tab-panel hidden space-y-4">
+            <div class="grid gap-4 lg:grid-cols-2">
+              <!-- Conexão / QR / Logs -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+                <h3 class="font-semibold">Conexão</h3>
+                <div id="qrBox" class="my-3 rounded border border-dashed border-neutral-700 p-3 flex items-center justify-center min-h-[180px]" aria-label="QR Code para parear"></div>
+
+                <div class="mt-3">
+                  <strong class="text-sm">Logs</strong>
+                  <pre id="logs" class="mt-2 p-2 rounded bg-black/60 border border-neutral-800 max-h-80 overflow-auto text-xs" aria-live="polite"></pre>
+                  <div class="mt-2 flex gap-2">
+                    <button id="btnCopyLogs" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Copiar logs</button>
+                    <button id="btnClearLogs" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Limpar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Automação -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+                <h3 class="font-semibold">Automação</h3>
+                <label class="mt-2 flex items-center gap-2 text-sm">
+                  <input type="checkbox" id="autoToggle" class="w-4 h-4"/>
+                  Modo Automático
+                </label>
+                <label class="text-sm mt-3">Regex para captar o código</label>
+                <input id="codeRegex" value="^\\d{4,}$" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                <button id="btnSaveRegex" class="mt-2 px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Salvar Regex</button>
+                <hr class="my-3 border-neutral-800" />
+                <div class="flex gap-2 flex-wrap">
+                  <button id="btnSendTest" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Enviar teste ao grupo</button>
+                  <button id="btnPing" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Ping</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CONFIGURAÇÃO -->
+          <section data-panel="config" class="tab-panel hidden space-y-4">
+            <div class="grid gap-4 lg:grid-cols-2">
+              <!-- Acesso -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+                <h3 class="font-semibold">Acesso (Matrícula & Senha)</h3>
+                <label class="text-sm">Matrícula</label>
+                <input id="regIdInput" placeholder="Ex.: 123456" inputmode="numeric" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                <label class="text-sm mt-3">Senha</label>
+                <input id="passwordInput" placeholder="••••••••" type="password" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                <small class="text-neutral-400 block mt-2">Armazenamento local do navegador.</small>
+                <div class="mt-3 flex gap-2">
+                  <button id="btnSaveCreds" class="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Salvar acesso</button>
+                  <button id="btnClearCreds" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Limpar</button>
+                </div>
+                <div id="credsSaved" class="hidden saved mt-3"></div>
+              </div>
+
+              <!-- Config da Loja -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+                <h3 class="font-semibold">Config da Loja (RUB)</h3>
+                <label class="text-sm">Apelido</label>
+                <input id="storeNameInput" placeholder="Ex.: Loja Centro" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                <label class="text-sm mt-3">IP do RUB</label>
+                <input id="storeIpInput" placeholder="Ex.: 10.48.69.146" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                <div class="mt-3 flex gap-2">
+                  <button id="btnSaveIP" class="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Salvar IP</button>
+                  <button id="btnClearIP" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Limpar</button>
+                </div>
+              </div>
+
+              <!-- Grupo -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4 lg:col-span-2">
+                <h3 class="font-semibold">Grupo alvo</h3>
+                <div class="flex gap-2 mt-2">
+                  <button id="btnKnowId" class="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Já sei o ID</button>
+                  <button id="btnDontKnowId" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Não sei o ID</button>
+                </div>
+
+                <div id="knowIdPanel" class="hidden panel mt-3">
+                  <label class="text-sm">ID do grupo <small class="font-mono text-xs">(ex.: 1203...@g.us)</small></label>
+                  <input id="groupIdInput" placeholder="1203...@g.us" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                  <div class="mt-3 flex gap-2">
+                    <button id="btnSetGroup" class="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Salvar grupo</button>
+                    <button id="btnClearGroup" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Limpar salvo</button>
+                  </div>
+
+                  <label class="text-sm mt-3 block">Ou entrar por convite</label>
+                  <input id="inviteInput" placeholder="https://chat.whatsapp.com/XXXX" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                  <button id="btnJoinInvite" class="mt-2 px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Entrar pelo convite</button>
+                </div>
+
+                <div id="dontKnowPanel" class="hidden panel mt-3">
+                  <div class="flex gap-2">
+                    <input id="searchGroup" placeholder="Buscar pelo nome" class="flex-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+                    <button id="btnReloadGroups" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm" style="flex:0 0 auto">Atualizar</button>
+                  </div>
+                  <select id="groupsList" size="8" class="mt-2 w-full rounded bg-neutral-800 border border-neutral-700 p-2"></select>
+                  <button id="btnSelectGroup" class="mt-2 px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-sm">Usar grupo selecionado</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- MANUTENÇÃO -->
+          <section data-panel="manutencao" class="tab-panel hidden space-y-4">
+            <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+              <h3 class="font-semibold">Avisos de Manutenção</h3>
+              <label class="text-sm mt-2 block">Quando</label>
+              <input id="maintWhen" placeholder="agora | em 30m | 2025-12-31 22:00" class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600" />
+              <label class="text-sm mt-3 block">Mensagem</label>
+              <textarea id="maintMsg" placeholder="🚧 Entraremos em manutenção em DD/MM às HH:mm. Previsão: 30min." class="w-full mt-1 px-3 py-2 rounded bg-neutral-800 border border-neutral-700 outline-none focus:ring-2 focus:ring-emerald-600"></textarea>
+              <label class="flex items-center gap-2 mt-2 text-sm">
+                <input type="checkbox" id="maintExit" class="w-4 h-4" />
+                Encerrar o bot após enviar
+              </label>
+              <div class="mt-3 flex gap-2">
+                <button id="btnMaintNow" class="px-3 py-2 rounded bg-amber-600 hover:bg-amber-700 text-sm">Avisar agora</button>
+                <button id="btnMaintSchedule" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Agendar</button>
+              </div>
+              <small class="text-neutral-400 block mt-2">Formatos: <code>agora</code>, <code>em 30m</code>, <code>em 2h</code>, <code>YYYY-MM-DD HH:mm</code>.</small>
+            </div>
+          </section>
+
+          <!-- HISTÓRICO -->
+          <section data-panel="historico" class="tab-panel hidden space-y-4">
+            <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+              <h3 class="font-semibold">Histórico de Execuções</h3>
+              <div id="history" class="text-neutral-400">Sem registros (ainda). Em breve: últimas 10 ações.</div>
+              <div class="mt-3 flex gap-2">
+                <button id="btnExportHistory" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Exportar histórico</button>
+                <button id="btnClearHistory" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Limpar histórico</button>
+                <button id="btnExportEvidenceTxt" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Exportar evidências (.txt)</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SUPORTE -->
+          <section data-panel="suporte" class="tab-panel hidden space-y-4">
+            <div class="grid gap-4 lg:grid-cols-2">
+              <!-- Passo a passo -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+                <h3 class="font-semibold">Passo a passo</h3>
+                <ol class="list-decimal ml-5 mt-2 text-neutral-300">
+                  <li>Pareie o WhatsApp escaneando o QR.</li>
+                  <li>Defina IP/Apelido da Loja (RUB).</li>
+                  <li>Selecione o Grupo (por ID, convite ou busca).</li>
+                  <li>Ative o Modo Automático e salve a Regex.</li>
+                  <li>Use “Manutenção” para avisos programados.</li>
+                </ol>
+              </div>
+
+              <!-- Erros comuns -->
+              <div class="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
+                <h3 class="font-semibold">Erros comuns & dicas</h3>
+                <ul class="list-disc ml-5 mt-2 text-neutral-300">
+                  <li>Se cair por versão do WhatsApp, use “Erro no código?” no Home.</li>
+                  <li>Sem PDF? Verifique pasta <span class="font-mono">/downloads</span> e permissões.</li>
+                  <li>Regex muito restritiva pode ignorar mensagens do grupo.</li>
+                  <li>Token do Manager errado → 401 no painel; ajuste no Home.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer class="border-t border-neutral-800 px-6 py-4 text-xs text-neutral-500 text-center">
+          © 2025 Urich — WPP Bot. MIT License.
+        </footer>
       </div>
-
-      <!-- Automação -->
-      <div class="card">
-        <h3>Automação</h3>
-        <label class="row" style="align-items:center">
-          <input type="checkbox" id="autoToggle" style="width:auto;margin-right:8px" />
-          Modo Automático
-        </label>
-        <label style="margin-top:8px">Regex para captar o código</label>
-        <input id="codeRegex" value="^\\d{4,}$" />
-        <button id="btnSaveRegex" style="margin-top:8px">Salvar Regex</button>
-        <hr>
-        <button id="btnSendTest" class="secondary">Enviar mensagem de teste ao grupo</button>
-      </div>
-
-      <!-- Manutenção -->
-      <div class="card">
-        <h3>Manutenção</h3>
-        <label>Quando</label>
-        <input id="maintWhen" placeholder='agora | em 30m | 2025-12-31 22:00' />
-        <label>Mensagem</label>
-        <textarea id="maintMsg" placeholder="🚧 Entraremos em manutenção em DD/MM às HH:mm. Previsão: 30min."></textarea>
-        <label class="row" style="margin-top:8px">
-          <input type="checkbox" id="maintExit" style="width:auto;margin-right:8px" />
-          Encerrar o bot após enviar
-        </label>
-        <div class="row" style="margin-top:10px">
-          <button id="btnMaintNow" class="warn">Avisar agora</button>
-          <button id="btnMaintSchedule">Agendar</button>
-        </div>
-        <small class="mono muted" style="display:block;margin-top:8px">
-          Formatos: <code>agora</code>, <code>em 30m</code>, <code>em 2h</code>, <code>YYYY-MM-DD HH:mm</code>.
-        </small>
-      </div>
-
-      <!-- Sobre & Créditos -->
-      <div class="card" id="creditsCard">
-        <h3>Sobre & Créditos</h3>
-        <div class="saved">
-          <div><strong>Projeto:</strong> WPP Bot</div>
-          <div><strong>Direitos Autorais:</strong> © 2025 Urich — Licença <span class="mono">MIT</span></div>
-        </div>
-
-        <div class="panel">
-          <label><strong>Origem da ideia</strong></label>
-          <div class="muted">Urich — concepção do fluxo, requisitos, visão.</div>
-        </div>
-
-        <div class="panel">
-          <label><strong>Automação (RUB / Selenium)</strong></label>
-          <div class="muted">eudaverdgs@gmail.com — automação inicial.</div>
-          <div class="muted">leozinho.yukih@gmail.com — melhorias e ajustes.</div>
-        </div>
-
-        <div class="panel">
-          <label><strong>Implementações recentes</strong></label>
-          <ul class="muted" style="margin:6px 0 0 18px">
-            <li>Bot terminal + UI (fila, regex, seleção de grupo/IP)</li>
-            <li>Envio de PDF com fallback e 3 tentativas</li>
-            <li>Manutenção agendada (CLI e UI)</li>
-            <li>Robustez no WhatsApp-web.js (cache e timeout)</li>
-          </ul>
-        </div>
-      </div>
-
     </div>
 
-    <footer class="muted" style="text-align:center; margin-top:20px">
-      © 2025 Urich — WPP Bot. MIT License.
-    </footer>
-  </main>
+    <!-- Modal de ajuda -->
+    <dialog id="helpDialog" class="backdrop:bg-black/50 rounded-lg">
+      <form method="dialog" class="p-4 min-w-[280px]">
+        <h3 class="text-base font-semibold">Ajuda rápida</h3>
+        <ol class="list-decimal ml-5 mt-2 text-neutral-300">
+          <li>Pareie o WhatsApp escaneando o QR.</li>
+          <li>Defina IP/Apelido da Loja (RUB).</li>
+          <li>Selecione o Grupo (por ID, convite ou busca).</li>
+          <li>Ative o Modo Automático e salve a Regex.</li>
+          <li>Use “Manutenção” para avisos programados.</li>
+        </ol>
+        <div class="mt-3 flex justify-end">
+          <button value="close" class="px-3 py-2 rounded border border-neutral-700 hover:bg-neutral-800 text-sm">Fechar</button>
+        </div>
+      </form>
+    </dialog>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="app.js"></script>
-</body>
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+    <script>
+      // Tabs
+      const panels = [...document.querySelectorAll('[data-panel]')];
+      const buttons = [...document.querySelectorAll('.tab-btn')];
+      function activate(tab){
+        panels.forEach(p => p.classList.toggle('hidden', p.dataset.panel !== tab));
+        buttons.forEach(b => b.classList.toggle('bg-neutral-800', b.dataset.tab === tab));
+        localStorage.setItem('ui.tab', tab);
+      }
+      buttons.forEach(b => b.addEventListener('click', () => activate(b.dataset.tab)));
+      activate(localStorage.getItem('ui.tab') || 'home');
+
+      // Tema + Ajuda
+      document.getElementById('btnHelp')?.addEventListener('click', () => {
+        const d = document.getElementById('helpDialog');
+        if (d?.showModal) d.showModal();
+      });
+      document.getElementById('btnTheme')?.addEventListener('click', () => {
+        document.documentElement.classList.toggle('light');
+      });
+
+      // Manager UI (SSE + ações)
+      (() => {
+        const $ = (q) => document.querySelector(q);
+        const mgrLogs = $('#mgrLogs');
+        const tokenInput = $('#mgrToken');
+        const urlInput = $('#mgrUrl');
+        const btnFix = $('#btnFix');
+        const btnStatus = $('#btnMgrStatus');
+        const btnStart = $('#btnMgrStart');
+        const btnStop = $('#btnMgrStop');
+        const btnCopy = $('#btnCopyMgrLogs');
+        const btnClear = $('#btnClearMgrLogs');
+        const btnReconnect = $('#btnReconnectLogs');
+
+        const LS_TK = 'mgrToken', LS_URL = 'mgrUrl';
+        tokenInput.value = localStorage.getItem(LS_TK) || tokenInput.value || '';
+        urlInput.value   = localStorage.getItem(LS_URL) || urlInput.value   || 'http://localhost:3030';
+        tokenInput.addEventListener('input', ()=> localStorage.setItem(LS_TK, tokenInput.value));
+        urlInput.addEventListener('input',  ()=> localStorage.setItem(LS_URL, urlInput.value));
+
+        let es = null; let busy = false;
+        function setBusy(on){ busy = !!on; [btnFix, btnStatus, btnStart, btnStop, btnReconnect].forEach(b=>b && (b.disabled = on)); }
+        function log(line){ const s = `[${new Date().toLocaleTimeString()}] ${line}\n`; mgrLogs.textContent += s; mgrLogs.scrollTop = mgrLogs.scrollHeight; }
+        function streamUrl(){ const base=(urlInput.value||'').replace(/\/+$/,''); const tk=encodeURIComponent(tokenInput.value||''); return `${base}/api/logs?token=${tk}`; }
+        function openLogStream(){
+          try{ es?.close(); }catch{}
+          const sseUrl=streamUrl();
+          try{
+            es=new EventSource(sseUrl);
+            es.onmessage=(e)=>{ mgrLogs.textContent += e.data + '\n'; mgrLogs.scrollTop = mgrLogs.scrollHeight; };
+            es.onerror=()=>{ log('stream encerrado'); try{ es.close(); }catch{}; };
+            log('Conectando aos logs do manager…');
+          }catch(e){ log('Falha ao abrir logs: '+e.message); }
+        }
+        async function call(path, method='GET', body=null){
+          const base=(urlInput.value||'').replace(/\/+$/,'');
+          const url=`${base}${path}`;
+          const headers={'Content-Type':'application/json'};
+          if (tokenInput.value) headers['X-Admin-Token']=tokenInput.value;
+          const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):null});
+          if(!res.ok){const txt=await res.text().catch(()=> ''); throw new Error(`${res.status} ${res.statusText} ${txt}`);}
+          return res.json();
+        }
+
+        btnFix?.addEventListener('click', async () => {
+          if (!tokenInput.value) { alert('Informe o Token admin.'); return; }
+          if (busy) return;
+          setBusy(true); openLogStream(); log('Disparando update (npm update whatsapp-web.js) + restart…');
+          try { await call('/api/update','POST'); log('Update acionado. Acompanhe acima.'); }
+          catch (e) { log('Falha ao acionar update: ' + e.message); }
+          finally { setTimeout(()=>{ try{ es?.close(); }catch{}; setBusy(false); }, 90_000); }
+        });
+        btnStatus?.addEventListener('click', async () => {
+          if (busy) return;
+          setBusy(true);
+          try { const st=await call('/api/status'); log(`Status → running=${st.running} | restartsHora=${st.restartsLastHour}`); }
+          catch(e){ log('Status falhou: '+e.message); }
+          finally{ setBusy(false); }
+        });
+        btnStart?.addEventListener('click',  async () => {
+          if (busy) return;
+          setBusy(true); openLogStream();
+          try { await call('/api/start','POST'); log('Start enviado.'); }
+          catch(e){ log('Start falhou: '+e.message); }
+          finally { setTimeout(()=>{ try{ es?.close(); }catch{}; setBusy(false); }, 20_000); }
+        });
+        btnStop?.addEventListener('click',   async () => {
+          if (busy) return;
+          setBusy(true); openLogStream();
+          try { await call('/api/stop','POST');  log('Stop enviado.'); }
+          catch(e){ log('Stop falhou: '+e.message); }
+          finally { setTimeout(()=>{ try{ es?.close(); }catch{}; setBusy(false); }, 10_000); }
+        });
+        btnCopy?.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(mgrLogs.textContent || ''); log('Logs copiados.'); }
+          catch { alert('Não consegui copiar.'); }
+        });
+        btnClear?.addEventListener('click', () => { mgrLogs.textContent = ''; });
+        btnReconnect?.addEventListener('click', () => { openLogStream(); });
+
+        // auto-conectar se já houver token
+        setTimeout(() => { if (tokenInput.value) openLogStream(); }, 500);
+      })();
+    </script>
+  </body>
 </html>
