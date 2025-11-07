@@ -5,11 +5,7 @@
 **Licença:** MIT  
 **Versão:** 1.0.1  
 
-===========================================================
-1. Como baixar o projeto
-git clone https://github.com/LawrenceUrich/wpp-bot.git >>
-cd wpp-bot
-===========================================================
+=============================================================================================================
 
 ## 🧠 Sobre o projeto
 
@@ -79,34 +75,34 @@ O projeto usa dist/server.js como entrada principal.
 ## 6️⃣ ⚙️ Scripts úteis
 
 
-# Servidor em modo desenvolvimento (TypeScript)
+### Servidor em modo desenvolvimento (TypeScript)
 ```bash
 npm run dev
 ```
 
-# Gera a pasta dist/
+### Gera a pasta dist/
 ```bash
 npm run build
 ```
-# Roda o bot usando os arquivos compilados
+### Roda o bot usando os arquivos compilados
 ```bash
 npm start
 ```
-# Modo dev do manager.ts
+### Modo dev do manager.ts
 ```bash
 npm run manager:dev
 ```
-# Teste de auto-update / gestão
+### Teste de auto-update / gestão
 ```bash
 npm run manager:start
 ```
-# Limpa node_modules e reinstala tudo
+### Limpa node_modules e reinstala tudo
 ```bash
 npm run reinstall
 ```
 
 
-7️⃣ 📂 Estrutura (resumida)
+## 7️⃣ 📂 Estrutura (resumida)
 wpp-bot/
 ├─ dist/            # Arquivos compilados JS (server, manager, storage, etc.)
 │  └─ data/
@@ -133,7 +129,8 @@ wpp-bot/
 └─ README.md        # Documentação do projeto
 
 ## 8️⃣ 🧾 Sobre os logs
-🔍 Eles mostram:
+
+### 🔍 Eles mostram:
 
 tentativas de login,
 
@@ -158,11 +155,9 @@ Eles mostram exatamente onde o processo parou, o que foi executado e o que deu e
 
 ## 📞 Suporte
 
-Se não conseguir identificar o problema ou precisar de ajuda com a configuração, entre em contato:
+### Se não conseguir identificar o problema ou precisar de ajuda com a configuração, entre em contato:
 📱 (21) 98211-1477
 👤 Leonardo (Urich)
 
 Consulte CREDITS.md para detalhes de autoria, contribuições e agradecimentos.
 =======
-
-Se algo quebrar, primeiro olha os logs. Caso não consiga identificar, entre em contato: (21) 98211-1477 >> Leonardo
