@@ -160,8 +160,9 @@ Eles mostram exatamente onde o processo parou, o que foi executado e o que deu e
 ## 📞 Suporte
 
 ### Se não conseguir identificar o problema ou precisar de ajuda com a configuração, entre em contato:
-📱 (21) 98211-1477
-👤 Leonardo (Urich)
+📱 (21) 98211-1477.
+
+👤 Leonardo (Urich).
 
 Consulte CREDITS.md para detalhes de autoria, contribuições e agradecimentos.
 =======
