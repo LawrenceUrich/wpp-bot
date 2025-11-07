@@ -5,7 +5,7 @@
 **Licença:** MIT  
 **Versão:** 1.0.1  
 
-=============================================================================================================
+---
 
 ## 🧠 Sobre o projeto
 
@@ -103,6 +103,7 @@ npm run reinstall
 
 
 ## 7️⃣ 📂 Estrutura (resumida)
+```bash
 wpp-bot/
 ├─ dist/            # Arquivos compilados JS (server, manager, storage, etc.)
 │  └─ data/
@@ -127,6 +128,7 @@ wpp-bot/
 ├─ CREDITS.md       # Créditos e colaborações
 ├─ LICENSE          # Licença MIT
 └─ README.md        # Documentação do projeto
+```
 
 ## 8️⃣ 🧾 Sobre os logs
 
