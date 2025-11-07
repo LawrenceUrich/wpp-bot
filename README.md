@@ -154,6 +154,7 @@ wpp-bot/
 - Visualizar se o RUB respondeu como esperado.
 
 Esses registros tornam o debug mais rápido e preciso.
+
 ---
 
 ## 💡 Dica:
