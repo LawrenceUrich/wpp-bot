@@ -142,7 +142,7 @@ wpp-bot/
 
 - Possíveis erros do Selenium ou do fluxo.
 
-- Isso facilita debugar rapidamente.
+#### Isso facilita debugar rapidamente.
 
 - Ver onde falhou.
 
