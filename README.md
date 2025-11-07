@@ -5,10 +5,11 @@
 **Licença:** MIT  
 **Versão:** 1.0.1  
 
-=======
+===========================================================
 1. Como baixar o projeto
 git clone https://github.com/LawrenceUrich/wpp-bot.git >>
 cd wpp-bot
+===========================================================
 
 ## 🧠 Sobre o projeto
 
@@ -34,60 +35,75 @@ Ele opera com **fila de execução**, **autenticação local (LocalAuth)** e **p
 
 ---
 
-## 1️⃣ Clonar o repositório
-   ```bash
-   git clone https://github.com/LawrenceUrich/wpp-bot.git
-   cd wpp-bot
+## 📖 Tutorial
 
-## 2️⃣ Instalar dependências
+### 1️⃣ Clonar o repositório
+```bash
+git clone https://github.com/LawrenceUrich/wpp-bot.git
+cd wpp-bot
+```
+
+### 2️⃣ Instalar dependências
 
 Certifique-se de ter Node 20+ instalado.
-
+```bash
 npm install
+```
 
 
-## 3️⃣ Rodar em modo desenvolvimento (TypeScript)
+### 3️⃣ Rodar em modo desenvolvimento (TypeScript)
 
 Ideal para ajustar e testar.
-
+```bash
 npm run dev
+```
 
 Isso sobe o src/server.ts usando TSX (sem precisar build manual).
 
-## 4️⃣ Gerar o build (dist)
+### 4️⃣ Gerar o build (dist)
 
 Compila o TypeScript para JavaScript dentro da pasta dist/.
-
+```bash
 npm run build
+```
 
-## 5️⃣ Rodar a versão compilada (dist)
+### 5️⃣ Rodar a versão compilada (dist)
 
 Depois do build:
-
+```bash
 npm start
+```
 
 O projeto usa dist/server.js como entrada principal.
 
 ## 6️⃣ ⚙️ Scripts úteis
 
-```bash
+
 # Servidor em modo desenvolvimento (TypeScript)
+```bash
 npm run dev
+```
 
 # Gera a pasta dist/
+```bash
 npm run build
-
+```
 # Roda o bot usando os arquivos compilados
+```bash
 npm start
-
+```
 # Modo dev do manager.ts
+```bash
 npm run manager:dev
-
+```
 # Teste de auto-update / gestão
+```bash
 npm run manager:start
-
+```
 # Limpa node_modules e reinstala tudo
+```bash
 npm run reinstall
+```
 
 
 7️⃣ 📂 Estrutura (resumida)
